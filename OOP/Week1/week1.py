@@ -6,15 +6,16 @@ class TestFactorize(unittest.TestCase):
     def test_wrong_types_raise_exception(self):
         """проверяет, что передаваемый в функцию аргумент типа float или str вызывает исключение TypeError.
         Тестовый набор входных данных:  'string',  1.5"""
-        self.assertRaises(TypeError, 'string')
-        self.assertRaises(TypeError, 1.5)
+        for n in (1.5,'string'):
+            with self.subTest(i=n):
+                self.assertRaises(TypeError, n)
 
     def test_negative(self):
         """проверяет, что передача в функцию factorize отрицательного числа вызывает исключение ValueError.
         Тестовый набор входных данных:   -1,  -10,  -100"""
-        self.assertRaises(ValueError, -1)
-        self.assertRaises(ValueError, -10)
-        self.assertRaises(ValueError, -100)
+        for n in (-1, -10, -100):
+            with self.subTest(i=n):
+                self.assertRaises(ValueError, n)
 
     def test_zero_and_one_cases(self):
         """проверяет, что при передаче в функцию целых чисел 0 и 1, возвращаются соответственно кортежи (0,) и (1,).
