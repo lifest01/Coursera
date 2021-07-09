@@ -5,37 +5,34 @@ import math
 SCREEN_DIM = (800, 600)
 
 
-# =======================================================================================
-# Функции для работы с векторами COMPLETE
-# =======================================================================================
 class Vec2d:
+    def __init__(self, x, y=None):
+        if y is None:
+            self.x = x[0]
+            self.y = x[1]
+        else:
+            self.x = x
+            self.y = y
 
-    def __init__(self, x):
-        self.x = x
+    def __add__(self, vec):
+        return Vec2d(self.x + vec.x, self.y + vec.y)
 
-    def __sub__(self, other):
-        """"возвращает разность двух векторов"""
-        return Vec2d((self.x[0] - other.x[0], self.x[1] - other.x[1]))
+    def __sub__(self, vec):
+        return Vec2d(self.x - vec.x, self.y - vec.y)
 
-    def __add__(self, other):
-        """возвращает сумму двух векторов"""
-        return self.x[0] + other.x[0], self.x[1] + other.x[1]
+    def __mul__(self, k):
+        if isinstance(k, Vec2d):
+            return self.x * k.x + self.y * k.y
+        return Vec2d(self.x * k, self.y * k)
 
-    def __len__(self):
-        """возвращает длину вектора°"""
-        return int(math.sqrt(self.x[0] ** 2 + self.x[1] ** 2))
-
-    def __mul__(self, other):
-        """возвращает произведение вектора на число"""
-        if isinstance(other, (int, float)):
-            return Vec2d((self.x[0] * other, self.x[1] * other))
+    def len(self, x):
+        return (x.x ** 2 + x.y ** 2) ** .5
 
     def int_pair(self):
-        return self.x[0], self.x[1]
+        return (int(self.x), int(self.y))
 
 
 class Polyline:
-
     def __init__(self):
         self.points = []
         self.speeds = []
@@ -45,12 +42,12 @@ class Polyline:
         self.speeds.append(speed)
 
     def set_points(self):
-        for p in range(len(self.points)):
-            self.points[p] = self.points[p] + self.speeds[p]
-            if self.points[p][0] > SCREEN_DIM[0] or self.points[p][0] < 0:
-                self.speeds[p] = Vec2d((- self.speeds[p][0], self.speeds[p][1]))
-            if self.points[p][1] > SCREEN_DIM[1] or self.points[p][1] < 0:
-                self.speeds[p] = Vec2d((self.speeds[p][0], -self.speeds[p][1]))
+        for i in range(len(self.points)):
+            self.points[i] += self.speeds[i]
+            if self.points[i].x > SCREEN_DIM[0] or self.points[i].x < 0:
+                self.speeds[i] = Vec2d(- self.speeds[i].x, self.speeds[i].y)
+            if self.points[i].y > SCREEN_DIM[1] or self.points[i].y < 0:
+                self.speeds[i] = Vec2d(self.speeds[i].x, -self.speeds[i].y)
 
     def draw_points(self, points, width=3, color=(255, 255, 255)):
         for point in points:
@@ -58,7 +55,6 @@ class Polyline:
 
 
 class Knot(Polyline):
-
     def __init__(self, count):
         super().__init__()
         self.count = count
@@ -91,9 +87,9 @@ class Knot(Polyline):
         res = []
         for i in range(-2, len(self.points) - 2):
             ptn = []
-            ptn.append(self.points[i] + self.points[i + 1] * 0.5)
+            ptn.append((self.points[i] + self.points[i + 1]) * 0.5)
             ptn.append(self.points[i + 1])
-            ptn.append(self.points[i + 1] + self.points[i + 2] * 0.5)
+            ptn.append((self.points[i + 1] + self.points[i + 2]) * 0.5)
             res.extend(self.get_points(ptn))
         return res
 
@@ -114,7 +110,6 @@ def draw_help():
     data.append(["Num-", "Less points"])
     data.append(["", ""])
     data.append([str(steps), "Current points"])
-
     pygame.draw.lines(gameDisplay, (255, 50, 50, 255), True, [
         (0, 0), (800, 0), (800, 600), (0, 600)], 5)
     for i, text in enumerate(data):
@@ -155,8 +150,8 @@ if __name__ == "__main__":
                 if event.key == pygame.K_KP_MINUS:
                     steps -= 1 if steps > 1 else 0
             if event.type == pygame.MOUSEBUTTONDOWN:
-                polyline.add_point(Vec2d(event.pos), random.random() * 2)
-                knot.add_point(Vec2d(event.pos), random.random() * 2)
+                polyline.add_point(Vec2d(event.pos), Vec2d(random.random() * 2, random.random() * 2))
+                knot.add_point(Vec2d(event.pos), Vec2d(random.random() * 2, random.random() * 2))
         gameDisplay.fill((0, 0, 0))
         hue = (hue + 1) % 360
         color.hsla = (hue, 100, 50, 100)

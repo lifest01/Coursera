@@ -134,7 +134,7 @@ if __name__ == "__main__":
     points = []
     speeds = []
     show_help = False
-    pause = False
+    pause = True
 
     hue = 0
     color = pygame.Color(5)
