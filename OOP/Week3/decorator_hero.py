@@ -1,3 +1,6 @@
+from abc import ABC, abstractmethod
+
+
 class Hero:
     def __init__(self):
         self.positive_effects = []
@@ -25,24 +28,49 @@ class Hero:
         return self.stats.copy()
 
 
-class AbstractEffect(Hero):
-    pass
+class AbstractEffect(Hero, ABC):
+
+    def __init__(self,obj):
+        super().__init__()
+        self.obj = obj
+
+
+    # def get_positive_effects(self):
+    #     self.get_positive_effects()
+    #     return positive
+    #
+    #
+    # def get_negative_effects(self):
+    #     return self.get_negative_effects()
 
 
 class AbstractPositive(AbstractEffect):
     pass
+    # def get_positive_effects(self):
+    #     return self.get_positive_effects()
+    #
+    # def get_negative_effects(self):
+    #     pass
 
 
 class AbstractNegative(AbstractEffect):
     pass
+    # def get_negative_effects(self):
+    #     return self.get_negative_effects()
+    #
+    # def get_positive_effects(self):
+    #     pass
 
 
 class Berserk(AbstractPositive):
-    pass
 
+    def get_positive_effects(self):
+        return self.positive_effects.append('Berserk')
 
 class Blessing(AbstractPositive):
-    pass
+
+    def get_positive_effects(self):
+        self.positive_effects.append('Blessing')
 
 
 class Weakness(AbstractNegative):
@@ -55,3 +83,9 @@ class Curse(AbstractNegative):
 
 class EvilEye(AbstractNegative):
     pass
+
+
+# hero = Hero()
+# print(hero.get_stats())
+# brs = Berserk(hero)
+# print(brs.get_positive_effects())

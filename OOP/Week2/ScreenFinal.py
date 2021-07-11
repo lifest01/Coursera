@@ -25,8 +25,8 @@ class Vec2d:
             return self.x * k.x + self.y * k.y
         return Vec2d(self.x * k, self.y * k)
 
-    def len(self, x):
-        return (x.x ** 2 + x.y ** 2) ** .5
+    def __len__(self, x):
+        return int((x.x ** 2 + x.y ** 2) ** .5)
 
     def int_pair(self):
         return (int(self.x), int(self.y))
