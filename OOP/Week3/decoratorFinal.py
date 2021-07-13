@@ -1,32 +1,6 @@
 from abc import ABC, abstractmethod
 
 
-class Hero:
-    def __init__(self):
-        self.positive_effects = []
-        self.negative_effects = []
-        self.stats = {
-            "HP": 128,  # health points
-            "MP": 42,  # magic points,
-            "SP": 100,  # skill points
-            "Strength": 15,  # сила
-            "Perception": 4,  # восприятие
-            "Endurance": 8,  # выносливость
-            "Charisma": 2,  # харизма
-            "Intelligence": 3,  # интеллект
-            "Agility": 8,  # ловкость
-            "Luck": 1  # удача
-        }
-
-    def get_positive_effects(self):
-        return self.positive_effects.copy()
-
-    def get_negative_effects(self):
-        return self.negative_effects.copy()
-
-    def get_stats(self):
-        return self.stats.copy()
-
 
 class AbstractEffect(Hero, ABC):
 
@@ -76,8 +50,8 @@ class Berserk(AbstractPositive):
         self.stats['Endurance'] += 7
         self.stats['Agility'] += 7
         self.stats['Luck'] += 7
-        self.stats['Perception'] -= 7
-        self.stats['Charisma'] -= 7
+        self.stats['Perception'] -= 3
+        self.stats['Charisma'] -= 3
         self.stats['Intelligence'] -= 3
         self.stats['HP'] += 50
 
@@ -126,12 +100,12 @@ class Weakness(AbstractNegative):
         return self.negative_effects.copy()
 
 
-class Curse(AbstractNegative):
+class EvilEye(AbstractNegative):
     def __init__(self, base):
         super().__init__(base)
         self.negative_effects = self.base.get_negative_effects()
         self.stats = self.base.get_stats()
-        self.negative_effects.append("Curse")
+        self.negative_effects.append("EvilEye")
         self.stats['Luck'] -= 10
 
     def get_stats(self):
@@ -141,12 +115,12 @@ class Curse(AbstractNegative):
         return self.negative_effects.copy()
 
 
-class EvilEye(AbstractNegative):
+class Curse(AbstractNegative):
     def __init__(self, base):
         super().__init__(base)
         self.negative_effects = self.base.get_negative_effects()
         self.stats = self.base.get_stats()
-        self.negative_effects.append("EvilEye")
+        self.negative_effects.append("Curse")
         self.stats['Strength'] -= 2
         self.stats['Perception'] -= 2
         self.stats['Endurance'] -= 2
