@@ -1,7 +1,10 @@
-import time
-import os
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
-pid = os.getpid()
-while True:
-    print(pid, time.time())
-    time.sleep(2)
+def f(a):
+    return a * a
+# .shutdown() in exit
+with ThreadPoolExecutor(max_workers=100) as pool:
+    results = [pool.submit(f, i) for i in range(10)]
+
+    for future in as_completed(results):
+        print(future.result())
