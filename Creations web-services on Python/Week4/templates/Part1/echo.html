@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Document</title>
+</head>
+<body>
+
+    {% if items %}
+        {% for k,v in items %}
+            {{ method }} {{ k }}: {{ v }}<br>
+        {% endfor %}
+    {% endif %}
+    statement is {{ header }}<br>
+    {{ items }}
+</body>
+</html>
